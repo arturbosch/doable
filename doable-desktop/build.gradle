@@ -1,0 +1,12 @@
+configurations {
+	compile.extendsFrom kotlin
+	testCompile.extendsFrom kotlinTest
+	testRuntime.extendsFrom junitPlatform
+}
+
+dependencies {
+	compile project(":doable-api")
+	compile 'com.google.code.gson:gson:2.8.0'
+	compile 'no.tornado:tornadofx:1.6.1'
+	compile 'com.jfoenix:jfoenix:1.1.0'
+}

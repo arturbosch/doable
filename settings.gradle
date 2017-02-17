@@ -1,0 +1,4 @@
+rootProject.name = 'doable'
+include 'doable-api'
+include 'doable-desktop'
+

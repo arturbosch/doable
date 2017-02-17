@@ -1,0 +1,66 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		mavenLocal()
+		maven {
+			url "http://dl.bintray.com/jetbrains/spek"
+		}
+	}
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+		classpath "org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion"
+	}
+}
+plugins {
+	id 'com.github.ben-manes.versions' version '0.13.0'
+	id "com.github.johnrengelman.shadow" version "1.2.3"
+//		id "com.github.hierynomus.license" version "0.13.1"
+}
+
+subprojects {
+
+	group 'io.gitlab.arturbosch'
+	version "$doableVersion"
+
+	repositories {
+		mavenCentral()
+		mavenLocal()
+		jcenter()
+		maven { url "http://dl.bintray.com/jetbrains/spek" }
+	}
+
+	apply plugin: 'java'
+	apply plugin: 'kotlin'
+	apply plugin: 'maven'
+
+	uploadArchives {
+		repositories {
+			mavenDeployer {
+				repository(url: uri('../repo'))
+			}
+		}
+	}
+
+	configurations {
+		kotlin
+		kotlinTest
+		junitPlatform
+	}
+
+	dependencies {
+		kotlin "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+		kotlinTest "org.junit.jupiter:junit-jupiter-api:$junitEngineVersion"
+		kotlinTest "com.natpryce:hamkrest:$hamkrestVersion"
+		kotlinTest "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
+		kotlinTest "org.jetbrains.spek:spek-api:$spekVersion"
+		kotlinTest "org.junit.jupiter:junit-jupiter-engine:$junitEngineVersion"
+		junitPlatform "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
+		junitPlatform "org.junit.platform:junit-platform-console:$junitPlatformVersion"
+		junitPlatform "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+	}
+
+	sourceSets {
+		main.java.srcDirs += 'src/main/kotlin'
+	}
+
+}
