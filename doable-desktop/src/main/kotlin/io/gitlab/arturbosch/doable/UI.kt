@@ -1,8 +1,19 @@
 package io.gitlab.arturbosch.doable
 
+import com.jfoenix.controls.JFXListView
 import javafx.application.Application
+import javafx.collections.FXCollections
 import tornadofx.App
 import tornadofx.View
+import tornadofx.borderpane
+import tornadofx.bottom
+import tornadofx.button
+import tornadofx.center
+import tornadofx.choicebox
+import tornadofx.hbox
+import tornadofx.label
+import tornadofx.opcr
+import tornadofx.top
 import kotlin.reflect.KClass
 
 /**
@@ -18,6 +29,28 @@ fun main(vararg args: String) {
 }
 
 class UI : View("Doable") {
-	override val root: javafx.scene.Parent
-		get() = throw UnsupportedOperationException()
+	override val root = borderpane {
+
+		top {
+			hbox {
+				label("Stars")
+				choicebox(values = FXCollections.observableList(listOf("Test", "Test2"))) {
+
+				}
+			}
+		}
+
+		center {
+			opcr(this, JFXListView<Task>()) {
+			}
+		}
+
+		bottom {
+			hbox {
+				button("Approve")
+				button("Reset")
+			}
+		}
+	}
 }
+
