@@ -1,6 +1,8 @@
-package io.gitlab.arturbosch.doable
+package io.gitlab.arturbosch.doable.data
 
 import com.google.gson.Gson
+import io.gitlab.arturbosch.doable.Memory
+import io.gitlab.arturbosch.doable.Persistence
 import java.io.File
 
 /**

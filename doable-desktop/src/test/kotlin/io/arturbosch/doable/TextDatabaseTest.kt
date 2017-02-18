@@ -5,7 +5,7 @@ import com.natpryce.hamkrest.equalTo
 import io.gitlab.arturbosch.doable.Memory
 import io.gitlab.arturbosch.doable.Streak
 import io.gitlab.arturbosch.doable.Task
-import io.gitlab.arturbosch.doable.TextDatabase
+import io.gitlab.arturbosch.doable.data.TextDatabase
 import io.gitlab.arturbosch.doable.WorkingList
 import org.junit.jupiter.api.Test
 import java.io.File
