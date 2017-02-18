@@ -6,13 +6,13 @@ import java.util.Date
  * @author Artur Bosch
  */
 
-data class Task(val description: String, val done: Boolean = false)
+data class Task(var description: String, var done: Boolean = false)
 
-data class WorkingList(val name: String, val tasks: MutableList<Task>)
+data class WorkingList(var name: String, var tasks: MutableList<Task>)
 
-data class Achievement(val workingListName: String, val date: Date, val points: Int)
+data class Achievement(var workingListName: String, var date: Date, var points: Int)
 
-data class Streak(val days: Int)
+data class Streak(var days: Int)
 
-data class Memory(val name: String, val lists: MutableList<WorkingList>, val achievements: MutableList<Achievement>,
-				  val day: Date, val points: Int, val currentStreak: Streak)
+data class Memory(var name: String, var lists: MutableList<WorkingList>, var achievements: MutableList<Achievement>,
+				  var date: Date, var points: Int, var currentStreak: Streak)
