@@ -5,11 +5,12 @@ import com.natpryce.hamkrest.equalTo
 import io.gitlab.arturbosch.doable.Memory
 import io.gitlab.arturbosch.doable.Streak
 import io.gitlab.arturbosch.doable.Task
-import io.gitlab.arturbosch.doable.data.TextDatabase
 import io.gitlab.arturbosch.doable.WorkingList
+import io.gitlab.arturbosch.doable.data.HomeFolder
+import io.gitlab.arturbosch.doable.data.TextDatabase
 import org.junit.jupiter.api.Test
-import java.io.File
 import java.nio.file.Files
+import java.nio.file.Path
 import java.util.Date
 
 /**
@@ -17,11 +18,14 @@ import java.util.Date
  */
 class TextDatabaseTest {
 
+	object TestFolder : HomeFolder {
+		val tempDir: Path = Files.createTempDirectory("doable")
+		override fun resolve(subPath: String): Path = tempDir.resolve(subPath)
+	}
+
 	@Test
 	fun saveLoadWorks() {
-		val tempDir = Files.createTempDirectory("doable")
-		val file = File(tempDir.resolve("Test.doable").toString())
-		val database = TextDatabase(file)
+		val database = TextDatabase(TestFolder)
 		val workingList = WorkingList("Everyday", mutableListOf(Task("DoIt", true)))
 		val memory = Memory("Test", mutableListOf(workingList), mutableListOf(), Date(), 0, Streak(0))
 
