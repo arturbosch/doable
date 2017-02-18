@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.doable.data
 
+import io.gitlab.arturbosch.doable.Task
 import tornadofx.Controller
 
 /**
@@ -7,5 +8,12 @@ import tornadofx.Controller
  */
 class TaskController : Controller() {
 
+	private val memoryModel: MemoryModel by inject()
+
+	fun loadTasks(): MutableList<ObservableTask> {
+		return memoryModel.tasks()
+	}
+
+	fun addTask(description: String) = memoryModel.addTask(ObservableTask(Task(description)))
 
 }

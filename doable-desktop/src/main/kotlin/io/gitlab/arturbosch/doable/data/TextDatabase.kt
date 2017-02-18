@@ -3,11 +3,13 @@ package io.gitlab.arturbosch.doable.data
 import com.google.gson.Gson
 import io.gitlab.arturbosch.doable.Memory
 import io.gitlab.arturbosch.doable.Persistence
+import tornadofx.Controller
+import tornadofx.find
 
 /**
  * @author Artur Bosch
  */
-class TextDatabase(val dir: HomeFolder) : Persistence {
+class TextDatabase(val dir: HomeFolder = find<DoableFolder>()) : Controller(), Persistence {
 
 	private val parser = Gson()
 

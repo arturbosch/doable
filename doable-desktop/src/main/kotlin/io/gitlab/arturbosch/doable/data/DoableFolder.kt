@@ -12,7 +12,7 @@ interface HomeFolder {
 	fun resolve(subPath: String): Path
 }
 
-object DoableFolder : Controller(), HomeFolder {
+class DoableFolder : Controller(), HomeFolder {
 
 	fun checkDir(path: Path): Path {
 		if (Files.notExists(path)) {

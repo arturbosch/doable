@@ -26,13 +26,11 @@ class ObservableWorkingList(workingList: WorkingList) {
 	var name: String by Delegates.observable(workingList.name) { kProperty: KProperty<*>, old: String, new: String ->
 		workingList.name = new
 	}
-	var tasks: MutableList<Task> by Delegates.observable(workingList.tasks) {
-		kProperty: KProperty<*>, old: MutableList<Task>, new: MutableList<Task> ->
-		workingList.tasks = new
-	}
+	var tasks: MutableList<ObservableTask> = workingList.tasks.map(Task::toObservable).toMutableList()
 }
 
 class ObservableAchievement(achievement: Achievement) {
+
 	var workingListName: String by Delegates.observable(achievement.workingListName) { kProperty: KProperty<*>, old: String, new: String ->
 		achievement.workingListName = new
 	}
@@ -41,24 +39,30 @@ class ObservableAchievement(achievement: Achievement) {
 }
 
 class ObservableStreak(streak: Streak) {
+
 	var days: Int by Delegates.observable(streak.days) { kProperty: KProperty<*>, old: Int, new: Int -> streak.days = new }
 }
 
 class ObservableMemory(memory: Memory) {
+
 	var name: String by Delegates.observable(memory.name) { kProperty: KProperty<*>, old: String, new: String ->
 		memory.name = new
 	}
 	var points: Int by Delegates.observable(memory.points) { kProperty: KProperty<*>, old: Int, new: Int -> memory.points = new }
 	var date: Date by Delegates.observable(memory.date) { kProperty: KProperty<*>, old: Date, new: Date -> memory.date = new }
-	var lists: MutableList<WorkingList> by Delegates.observable(memory.lists) {
-		kProperty: KProperty<*>, old: MutableList<WorkingList>, new: MutableList<WorkingList> ->
-		memory.lists = new
-	}
-	var achievements: MutableList<Achievement> by Delegates.observable(memory.achievements) {
-		kProperty: KProperty<*>, old: MutableList<Achievement>, new: MutableList<Achievement> ->
-		memory.achievements = new
-	}
+	var lists: MutableList<ObservableWorkingList> = memory.lists.map { it.toObservable() }.toMutableList()
+
+	var achievements: MutableList<ObservableAchievement> = memory.achievements.map { it.toObservable() }.toMutableList()
+
 	var currentStreak: Streak by Delegates.observable(memory.currentStreak) { kProperty: KProperty<*>, old: Streak, new: Streak ->
 		memory.currentStreak = new
 	}
 }
+
+fun Memory.toObservable(): ObservableMemory = ObservableMemory(this)
+
+private fun Achievement.toObservable(): ObservableAchievement = ObservableAchievement(this)
+
+private fun WorkingList.toObservable(): ObservableWorkingList = ObservableWorkingList(this)
+
+private fun Task.toObservable(): ObservableTask = ObservableTask(this)

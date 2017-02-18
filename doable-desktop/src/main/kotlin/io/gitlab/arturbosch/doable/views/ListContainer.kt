@@ -2,8 +2,9 @@ package io.gitlab.arturbosch.doable.views
 
 import com.jfoenix.controls.JFXCheckBox
 import com.jfoenix.controls.JFXListView
-import io.gitlab.arturbosch.doable.Task
 import io.gitlab.arturbosch.doable.append
+import io.gitlab.arturbosch.doable.data.ObservableTask
+import io.gitlab.arturbosch.doable.data.TaskController
 import javafx.collections.FXCollections
 import javafx.scene.Parent
 import javafx.scene.control.Label
@@ -19,10 +20,15 @@ import tornadofx.vbox
  * @author Artur Bosch
  */
 class ListContainer : View() {
+
+	private val taskController: TaskController by inject()
+
+	private var tasks: MutableList<ObservableTask> = taskController.loadTasks()
+
 	override val root: Parent = vbox {
-		append(JFXListView<Task>()) {
+		append(JFXListView<ObservableTask>()) {
 			VBox.setVgrow(this, Priority.ALWAYS)
-			items = FXCollections.observableList(listOf(Task("Hier steht text"), Task("Noch mehr Text")))
+			items = FXCollections.observableList(tasks)
 			setCellFactory {
 				ListContainerViewCell()
 			}
@@ -30,7 +36,7 @@ class ListContainer : View() {
 	}
 }
 
-class ListContainerViewCell : ListCell<Task>() {
+class ListContainerViewCell : ListCell<ObservableTask>() {
 
 	private val doneBox = JFXCheckBox()
 	private val description = Label()
@@ -42,7 +48,7 @@ class ListContainerViewCell : ListCell<Task>() {
 		addColumn(1, description)
 	}
 
-	override fun updateItem(item: Task?, empty: Boolean) {
+	override fun updateItem(item: ObservableTask?, empty: Boolean) {
 		super.updateItem(item, empty)
 		item?.let {
 			doneBox.isSelected = it.done
