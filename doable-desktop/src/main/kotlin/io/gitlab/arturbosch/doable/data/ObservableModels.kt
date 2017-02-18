@@ -5,7 +5,11 @@ import io.gitlab.arturbosch.doable.Memory
 import io.gitlab.arturbosch.doable.Streak
 import io.gitlab.arturbosch.doable.Task
 import io.gitlab.arturbosch.doable.WorkingList
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.SimpleStringProperty
+import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
@@ -22,10 +26,14 @@ import kotlin.reflect.KProperty
 class ObservableTask(val task: Task) : ItemViewModel<Task>() {
 	var description: String by Delegates.observable(task.description) { kProperty: KProperty<*>, old: String, new: String ->
 		task.description = new
+		descriptionProperty.set(new)
 	}
 	var done: Boolean by Delegates.observable(task.done) { kProperty: KProperty<*>, old: Boolean, new: Boolean ->
 		task.done = new
+		doneProperty.set(new)
 	}
+	val descriptionProperty: StringProperty = bind { SimpleStringProperty(description) }
+	val doneProperty: BooleanProperty = bind { SimpleBooleanProperty(done) }
 }
 
 

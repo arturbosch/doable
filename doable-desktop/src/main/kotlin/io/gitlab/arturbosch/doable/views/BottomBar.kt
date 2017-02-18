@@ -2,7 +2,10 @@ package io.gitlab.arturbosch.doable.views
 
 import com.jfoenix.controls.JFXButton
 import com.jfoenix.controls.JFXTextField
+import io.gitlab.arturbosch.doable.ApproveEvent
+import io.gitlab.arturbosch.doable.ResetEvent
 import io.gitlab.arturbosch.doable.append
+import io.gitlab.arturbosch.doable.bus
 import io.gitlab.arturbosch.doable.data.TaskController
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -38,9 +41,11 @@ class BottomBar : View() {
 			alignment = Pos.CENTER
 			append(JFXButton("Approve")) {
 				prefWidth = 200.0
+				setOnMouseClicked { bus.fire(ApproveEvent) }
 			}
 			append(JFXButton("Reset")) {
 				prefWidth = 200.0
+				setOnMouseClicked { bus.fire(ResetEvent) }
 			}
 
 		}

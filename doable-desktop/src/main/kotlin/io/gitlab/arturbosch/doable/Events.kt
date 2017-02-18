@@ -8,4 +8,8 @@ import tornadofx.FXEvent
  */
 object SaveEvent : FXEvent(EventBus.RunOn.BackgroundThread)
 
+object ResetEvent : FXEvent()
+
+object ApproveEvent : FXEvent()
+
 val bus = EventBus()

@@ -2,6 +2,8 @@ package io.gitlab.arturbosch.doable.views
 
 import com.jfoenix.controls.JFXCheckBox
 import com.jfoenix.controls.JFXListView
+import io.gitlab.arturbosch.doable.ApproveEvent
+import io.gitlab.arturbosch.doable.ResetEvent
 import io.gitlab.arturbosch.doable.SaveEvent
 import io.gitlab.arturbosch.doable.append
 import io.gitlab.arturbosch.doable.bus
@@ -13,6 +15,7 @@ import javafx.scene.control.Label
 import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
+import tornadofx.DefaultScope
 import tornadofx.View
 import tornadofx.gridpane
 import tornadofx.vbox
@@ -22,26 +25,36 @@ import tornadofx.vbox
  */
 class ListContainer : View() {
 
-	private val taskController: TaskController by inject()
+	init {
+		bus.subscribe(ApproveEvent::class, DefaultScope) {
+			listView.items.forEach { it.done = false }
+		}
+		bus.subscribe(ResetEvent::class, DefaultScope) {
+			listView.items.forEach { it.done = false }
+		}
+	}
 
+	private val taskController: TaskController by inject()
 	private var observableWorkingList: ObservableWorkingList = taskController.currentList()
 
+	private val listView = JFXListView<ObservableTask>()
+
 	override val root: Parent = vbox {
-		append(JFXListView<ObservableTask>()) {
+		append(listView) {
 			VBox.setVgrow(this, Priority.ALWAYS)
 			cellCache { task ->
 				gridpane {
 					columnConstraints.add(ColumnConstraints().apply { percentWidth = 20.0 })
 					columnConstraints.add(ColumnConstraints().apply { percentWidth = 80.0 })
 					addColumn(0, JFXCheckBox().apply {
-						isSelected = task.done
+						selectedProperty().bindBidirectional(task.doneProperty)
 						selectedProperty().addListener { observableValue, old, new ->
 							task.done = new
 							bus.fire(SaveEvent)
 						}
 					})
 					addColumn(1, Label().apply {
-						text = task.description
+						textProperty().bindBidirectional(task.descriptionProperty)
 						textProperty().addListener { observableValue, old, new ->
 							task.description = new
 							bus.fire(SaveEvent)
