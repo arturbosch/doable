@@ -28,8 +28,11 @@ class ListContainer : View() {
 
 	init {
 		bus.subscribe(ApproveEvent::class, DefaultScope) {
-			bus.fire(StarEvent)
-			listView.items.forEach { it.done = false }
+			val items = listView.items
+			if (items.all { it.done }) {
+				bus.fire(StarEvent)
+				items.forEach { it.done = false }
+			}
 		}
 		bus.subscribe(ResetEvent::class, DefaultScope) {
 			listView.items.forEach { it.done = false }
@@ -37,8 +40,8 @@ class ListContainer : View() {
 	}
 
 	private val taskController: TaskController by inject()
-	private var observableWorkingList: ObservableWorkingList = taskController.currentList()
 
+	private var observableWorkingList: ObservableWorkingList = taskController.currentList()
 	private val listView = JFXListView<ObservableTask>()
 
 	override val root: Parent = vbox {
