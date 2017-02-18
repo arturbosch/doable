@@ -6,7 +6,7 @@ import java.util.Date
  * @author Artur Bosch
  */
 
-data class Task(val description: String, val done: Boolean)
+data class Task(val description: String, val done: Boolean = false)
 
 data class WorkingList(val name: String, val tasks: MutableList<Task>)
 
