@@ -19,7 +19,7 @@ class MemoryModel(val database: Persistence = find<TextDatabase>()) : ViewModel(
 		}
 	}
 
-	private val observableMemory = database.load("Test").toObservable()
+	val observableMemory = database.load("Test").toObservable()
 	var currentList = observableMemory.lists[0]
 
 	fun tasks(): MutableList<ObservableTask> = currentList.tasks
@@ -28,5 +28,8 @@ class MemoryModel(val database: Persistence = find<TextDatabase>()) : ViewModel(
 		bus.fire(SaveEvent)
 	}
 
+	fun plusStar(amount: Int) {
+		observableMemory.points += amount
+	}
 }
 

@@ -1,14 +1,20 @@
 package io.gitlab.arturbosch.doable.views
 
 import com.jfoenix.controls.JFXComboBox
+import io.gitlab.arturbosch.doable.StarEvent
 import io.gitlab.arturbosch.doable.append
+import io.gitlab.arturbosch.doable.bus
+import io.gitlab.arturbosch.doable.data.StarController
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Parent
+import javafx.scene.control.Label
 import javafx.scene.control.ListCell
 import javafx.scene.layout.ColumnConstraints
+import tornadofx.DefaultScope
 import tornadofx.View
+import tornadofx.find
 import tornadofx.gridpane
 import tornadofx.hbox
 import tornadofx.label
@@ -26,14 +32,27 @@ class TopBar : View() {
 	}
 }
 
-class StarComponent : View() {
+class StarComponent(private val starController: StarController = find(StarController::class)) : View() {
+
+	init {
+		bus.subscribe(StarEvent::class, DefaultScope) {
+			starController.addStar()
+			loadStars()
+		}
+	}
+
+	private val starsLabel = Label()
+	private fun loadStars() {
+		starsLabel.text = starController.stars().toString()
+	}
 
 	override val root: Parent = hbox {
 		alignment = Pos.CENTER_LEFT
 		label("Stars: ") {
 			padding = Insets(5.0)
 		}
-		label("0") {
+		append(starsLabel) {
+			loadStars()
 			padding = Insets(5.0)
 		}
 	}

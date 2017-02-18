@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXListView
 import io.gitlab.arturbosch.doable.ApproveEvent
 import io.gitlab.arturbosch.doable.ResetEvent
 import io.gitlab.arturbosch.doable.SaveEvent
+import io.gitlab.arturbosch.doable.StarEvent
 import io.gitlab.arturbosch.doable.append
 import io.gitlab.arturbosch.doable.bus
 import io.gitlab.arturbosch.doable.data.ObservableTask
@@ -27,6 +28,7 @@ class ListContainer : View() {
 
 	init {
 		bus.subscribe(ApproveEvent::class, DefaultScope) {
+			bus.fire(StarEvent)
 			listView.items.forEach { it.done = false }
 		}
 		bus.subscribe(ResetEvent::class, DefaultScope) {
