@@ -4,8 +4,8 @@ import com.jfoenix.controls.JFXCheckBox
 import com.jfoenix.controls.JFXListView
 import io.gitlab.arturbosch.doable.append
 import io.gitlab.arturbosch.doable.data.ObservableTask
+import io.gitlab.arturbosch.doable.data.ObservableWorkingList
 import io.gitlab.arturbosch.doable.data.TaskController
-import javafx.collections.FXCollections
 import javafx.scene.Parent
 import javafx.scene.control.Label
 import javafx.scene.control.ListCell
@@ -23,12 +23,13 @@ class ListContainer : View() {
 
 	private val taskController: TaskController by inject()
 
-	private var tasks: MutableList<ObservableTask> = taskController.loadTasks()
+	private var observableWorkingList: ObservableWorkingList = taskController.currentList()
 
 	override val root: Parent = vbox {
 		append(JFXListView<ObservableTask>()) {
 			VBox.setVgrow(this, Priority.ALWAYS)
-			items = FXCollections.observableList(tasks)
+			itemsProperty().bindBidirectional(observableWorkingList.observableTasks)
+			items = observableWorkingList.tasks
 			setCellFactory {
 				ListContainerViewCell()
 			}

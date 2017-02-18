@@ -10,6 +10,8 @@ class TaskController : Controller() {
 
 	private val memoryModel: MemoryModel by inject()
 
+	fun currentList(): ObservableWorkingList = memoryModel.currentList
+
 	fun loadTasks(): MutableList<ObservableTask> {
 		return memoryModel.tasks()
 	}

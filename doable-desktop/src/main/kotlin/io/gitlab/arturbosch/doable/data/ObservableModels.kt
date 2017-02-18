@@ -5,6 +5,10 @@ import io.gitlab.arturbosch.doable.Memory
 import io.gitlab.arturbosch.doable.Streak
 import io.gitlab.arturbosch.doable.Task
 import io.gitlab.arturbosch.doable.WorkingList
+import javafx.beans.property.SimpleObjectProperty
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
+import tornadofx.ItemViewModel
 import java.util.Date
 import kotlin.properties.Delegates
 import kotlin.reflect.KProperty
@@ -22,11 +26,12 @@ class ObservableTask(task: Task) {
 	}
 }
 
-class ObservableWorkingList(workingList: WorkingList) {
+class ObservableWorkingList(workingList: WorkingList) : ItemViewModel<WorkingList>() {
 	var name: String by Delegates.observable(workingList.name) { kProperty: KProperty<*>, old: String, new: String ->
 		workingList.name = new
 	}
-	var tasks: MutableList<ObservableTask> = workingList.tasks.map(Task::toObservable).toMutableList()
+	var tasks: ObservableList<ObservableTask> = FXCollections.observableList(workingList.tasks.map(Task::toObservable))
+	val observableTasks = bind { SimpleObjectProperty<ObservableList<ObservableTask>>(tasks) }
 }
 
 class ObservableAchievement(achievement: Achievement) {

@@ -10,7 +10,7 @@ import tornadofx.find
 class MemoryModel(val database: Persistence = find<TextDatabase>()) : ViewModel() {
 
 	private val memory = database.load("Test").toObservable()
-	private var currentList = memory.lists[0]
+	var currentList = memory.lists[0]
 
 	fun tasks(): MutableList<ObservableTask> = currentList.tasks
 	fun addTask(observableTask: ObservableTask) = currentList.tasks.add(observableTask)
