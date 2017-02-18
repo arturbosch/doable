@@ -28,6 +28,7 @@ class ObservableTask(val task: Task) : ItemViewModel<Task>() {
 	}
 }
 
+
 class ObservableWorkingList(workingList: WorkingList) : ItemViewModel<WorkingList>() {
 	var name: String by Delegates.observable(workingList.name) { kProperty: KProperty<*>, old: String, new: String ->
 		workingList.name = new
