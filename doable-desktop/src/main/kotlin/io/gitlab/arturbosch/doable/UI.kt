@@ -14,8 +14,7 @@ import kotlin.reflect.KClass
  * @author Artur Bosch
  */
 class DoableApp : App() {
-	override val primaryView: KClass<out View>
-		get() = UI::class
+	override val primaryView: KClass<out View> = UI::class
 }
 
 fun main(vararg args: String) {
