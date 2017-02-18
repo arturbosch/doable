@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.doable.views
 
-import com.jfoenix.controls.JFXCheckBox
 import com.jfoenix.controls.JFXListView
 import io.gitlab.arturbosch.doable.append
 import io.gitlab.arturbosch.doable.data.ObservableTask
 import io.gitlab.arturbosch.doable.data.ObservableWorkingList
 import io.gitlab.arturbosch.doable.data.TaskController
 import javafx.scene.Parent
+import javafx.scene.control.CheckBox
 import javafx.scene.control.Label
 import javafx.scene.control.ListCell
 import javafx.scene.layout.ColumnConstraints
@@ -28,18 +28,15 @@ class ListContainer : View() {
 	override val root: Parent = vbox {
 		append(JFXListView<ObservableTask>()) {
 			VBox.setVgrow(this, Priority.ALWAYS)
+			setCellFactory { ListContainerViewCell() }
 			itemsProperty().bindBidirectional(observableWorkingList.observableTasks)
-			items = observableWorkingList.tasks
-			setCellFactory {
-				ListContainerViewCell()
-			}
 		}
 	}
 }
 
 class ListContainerViewCell : ListCell<ObservableTask>() {
 
-	private val doneBox = JFXCheckBox()
+	private val doneBox = CheckBox()
 	private val description = Label()
 
 	private val root: Parent = gridpane {

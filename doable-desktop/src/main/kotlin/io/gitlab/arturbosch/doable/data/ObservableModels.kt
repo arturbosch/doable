@@ -7,8 +7,10 @@ import io.gitlab.arturbosch.doable.Task
 import io.gitlab.arturbosch.doable.WorkingList
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
+import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
 import tornadofx.ItemViewModel
+import java.util.ArrayList
 import java.util.Date
 import kotlin.properties.Delegates
 import kotlin.reflect.KProperty
@@ -17,7 +19,7 @@ import kotlin.reflect.KProperty
  * @author Artur Bosch
  */
 
-class ObservableTask(task: Task) {
+class ObservableTask(val task: Task) : ItemViewModel<Task>() {
 	var description: String by Delegates.observable(task.description) { kProperty: KProperty<*>, old: String, new: String ->
 		task.description = new
 	}
@@ -30,7 +32,11 @@ class ObservableWorkingList(workingList: WorkingList) : ItemViewModel<WorkingLis
 	var name: String by Delegates.observable(workingList.name) { kProperty: KProperty<*>, old: String, new: String ->
 		workingList.name = new
 	}
-	var tasks: ObservableList<ObservableTask> = FXCollections.observableList(workingList.tasks.map(Task::toObservable))
+	var tasks: ObservableList<ObservableTask> = FXCollections.observableList(workingList.tasks.map(Task::toObservable)).apply {
+		addListener(ListChangeListener {
+			workingList.tasks = it.list.mapTo(ArrayList()) { it.task }
+		})
+	}
 	val observableTasks = bind { SimpleObjectProperty<ObservableList<ObservableTask>>(tasks) }
 }
 
@@ -48,7 +54,7 @@ class ObservableStreak(streak: Streak) {
 	var days: Int by Delegates.observable(streak.days) { kProperty: KProperty<*>, old: Int, new: Int -> streak.days = new }
 }
 
-class ObservableMemory(memory: Memory) {
+class ObservableMemory(val memory: Memory) {
 
 	var name: String by Delegates.observable(memory.name) { kProperty: KProperty<*>, old: String, new: String ->
 		memory.name = new
