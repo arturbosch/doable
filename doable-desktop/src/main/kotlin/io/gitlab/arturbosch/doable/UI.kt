@@ -7,6 +7,8 @@ import javafx.application.Application
 import tornadofx.App
 import tornadofx.View
 import tornadofx.borderpane
+import tornadofx.opcr
+import tornadofx.vbox
 import kotlin.reflect.KClass
 
 
@@ -14,11 +16,17 @@ import kotlin.reflect.KClass
  * @author Artur Bosch
  */
 class DoableApp : App() {
-	override val primaryView: KClass<out View> = UI::class
+	override val primaryView: KClass<out View> = AccelTest::class
 }
 
 fun main(vararg args: String) {
 	Application.launch(DoableApp::class.java, *args)
+}
+
+class AccelTest : View() {
+	override val root = vbox {
+		opcr(this, find<BottomBar>().root)
+	}
 }
 
 class UI : View("Doable") {
