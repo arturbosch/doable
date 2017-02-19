@@ -10,6 +10,10 @@ import io.gitlab.arturbosch.doable.data.TaskController
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Parent
+import javafx.scene.control.Button
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyCodeCombination
+import javafx.scene.input.KeyCombination
 import tornadofx.View
 import tornadofx.hbox
 import tornadofx.margin
@@ -22,7 +26,7 @@ class BottomBar : View() {
 
 	private val taskController: TaskController by inject()
 
-	private val addButton = JFXButton("Add")
+	private val addButton = Button("Add")
 	private val descriptionField = JFXTextField()
 
 	override val root: Parent = vbox {
@@ -32,20 +36,24 @@ class BottomBar : View() {
 			append(descriptionField) {
 				prefWidth = 300.0
 				promptText = "Enter task"
+				accelerators.put(KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_ANY)) { this.requestFocus() }
+				setOnKeyPressed { if (it.code == KeyCode.ENTER) addNewTask() }
 			}
 			append(addButton) {
-				setOnMouseClicked { addNewTask() }
+				setOnAction { addNewTask() }
 			}
 		}
 		hbox {
 			alignment = Pos.CENTER
 			append(JFXButton("Approve")) {
 				prefWidth = 200.0
-				setOnMouseClicked { bus.fire(ApproveEvent) }
+				accelerator(KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_ANY, KeyCombination.SHIFT_ANY))
+				setOnAction { bus.fire(ApproveEvent) }
 			}
 			append(JFXButton("Reset")) {
 				prefWidth = 200.0
-				setOnMouseClicked { bus.fire(ResetEvent) }
+				accelerator(KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_ANY, KeyCombination.SHIFT_ANY))
+				setOnAction { bus.fire(ResetEvent) }
 			}
 
 		}

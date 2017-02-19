@@ -28,7 +28,6 @@ class TopBar : View() {
 		columnConstraints.add(ColumnConstraints().apply { percentWidth = 50.0 })
 		add(find<StarComponent>().root, 0, 0)
 		add(find<WorkingListComponent>().root, 1, 0)
-
 	}
 }
 
