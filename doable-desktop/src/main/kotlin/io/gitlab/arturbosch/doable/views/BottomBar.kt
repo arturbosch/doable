@@ -14,7 +14,6 @@ import javafx.scene.input.KeyCombination
 import tornadofx.View
 import tornadofx.alert
 import tornadofx.hbox
-import tornadofx.margin
 import tornadofx.vbox
 
 /**
@@ -29,7 +28,7 @@ class BottomBar : View() {
 
 	override val root: Parent = vbox {
 		hbox {
-			margin = Insets(10.0, 0.0, 20.0, 0.0)
+			padding = Insets(10.0, 0.0, 20.0, 0.0)
 			alignment = Pos.BOTTOM_CENTER
 			append(descriptionField) {
 				prefWidth = 300.0

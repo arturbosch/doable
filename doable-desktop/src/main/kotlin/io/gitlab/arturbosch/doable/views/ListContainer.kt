@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.doable.ResetEvent
 import io.gitlab.arturbosch.doable.SaveEvent
 import io.gitlab.arturbosch.doable.StarEvent
 import io.gitlab.arturbosch.doable.append
-import io.gitlab.arturbosch.doable.bus
 import io.gitlab.arturbosch.doable.data.ObservableTask
 import io.gitlab.arturbosch.doable.data.ObservableWorkingList
 import io.gitlab.arturbosch.doable.data.TaskController
@@ -16,7 +15,7 @@ import javafx.scene.control.Label
 import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
-import tornadofx.DefaultScope
+import tornadofx.FX
 import tornadofx.View
 import tornadofx.gridpane
 import tornadofx.vbox
@@ -27,14 +26,14 @@ import tornadofx.vbox
 class ListContainer : View() {
 
 	init {
-		bus.subscribe(ApproveEvent::class, DefaultScope) {
+		subscribe<ApproveEvent> {
 			val items = listView.items
 			if (items.all { it.done }) {
-				bus.fire(StarEvent)
+				FX.eventbus.fire(StarEvent)
 				items.forEach { it.done = false }
 			}
 		}
-		bus.subscribe(ResetEvent::class, DefaultScope) {
+		subscribe<ResetEvent> {
 			listView.items.forEach { it.done = false }
 		}
 	}
@@ -55,14 +54,14 @@ class ListContainer : View() {
 						selectedProperty().bindBidirectional(task.doneProperty)
 						selectedProperty().addListener { observableValue, old, new ->
 							task.done = new
-							bus.fire(SaveEvent)
+							FX.eventbus.fire(SaveEvent)
 						}
 					})
 					addColumn(1, Label().apply {
 						textProperty().bindBidirectional(task.descriptionProperty)
 						textProperty().addListener { observableValue, old, new ->
 							task.description = new
-							bus.fire(SaveEvent)
+							FX.eventbus.fire(SaveEvent)
 						}
 					})
 				}

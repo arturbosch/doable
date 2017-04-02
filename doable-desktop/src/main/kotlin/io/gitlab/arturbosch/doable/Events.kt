@@ -13,5 +13,3 @@ object ResetEvent : FXEvent()
 object ApproveEvent : FXEvent()
 
 object StarEvent : FXEvent()
-
-val bus = EventBus()

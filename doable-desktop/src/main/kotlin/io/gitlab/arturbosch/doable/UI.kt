@@ -11,12 +11,11 @@ import tornadofx.opcr
 import tornadofx.vbox
 import kotlin.reflect.KClass
 
-
 /**
  * @author Artur Bosch
  */
 class DoableApp : App() {
-	override val primaryView: KClass<out View> = AccelTest::class
+	override val primaryView: KClass<out View> = UI::class
 }
 
 fun main(vararg args: String) {

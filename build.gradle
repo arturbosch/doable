@@ -41,8 +41,12 @@ subprojects {
 		}
 	}
 
+	compileKotlin {
+		kotlinOptions.jvmTarget = "1.8"
+	}
+
 	configurations {
-		kotlin
+		create 'kotlin'
 		kotlinTest
 		junitPlatform
 	}
